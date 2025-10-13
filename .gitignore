@@ -1,0 +1,6 @@
+# HOME-like stuff from denv
+.*
+!.gitignore
+
+# data files
+*.root

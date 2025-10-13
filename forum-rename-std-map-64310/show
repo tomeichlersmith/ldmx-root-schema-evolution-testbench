@@ -1,0 +1,17 @@
+#!/bin/sh
+
+echo "Building example programs..."
+cmake -B build -S .
+cmake --build build
+
+echo "Writing Header V1 to file..."
+./build/write
+
+echo "Reading file with Header V1:"
+./build/read-v1
+
+echo "Reading file with Header V2:"
+./build/read-v2
+
+echo "Reading file with Header Both:"
+./build/read-both
