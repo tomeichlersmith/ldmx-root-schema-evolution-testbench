@@ -1,0 +1,30 @@
+#!/bin/sh
+
+echo "Building example programs..."
+cmake -B build -S .
+cmake --build build
+
+echo "Writing Header V1 to file..."
+./build/write-v1
+echo "Contents of v1-output:"
+./build/read-v1 v1-output.root
+echo "Copying v1-output with v1:"
+./build/copy-v1 v1-output.root
+echo "Contents of v1-copy-v1-output:"
+./build/read-v1 v1-copy-v1-output.root
+
+echo "Writing Header V2 to file..."
+./build/write-v2
+echo "Contents of v2-output:"
+./build/read-v2 v2-output.root
+echo "Copying v2-output with v2:"
+./build/copy-v2 v2-output.root
+echo "Contents of v2-copy-v2-output:"
+./build/read-v2 v2-copy-v2-output.root
+
+echo "Copying v1-output with v2:"
+./build/copy-v2 v1-output.root
+echo "Contents of v2-copy-v1-output according to v2:"
+./build/read-v2 v2-copy-v1-output.root
+echo "Contents of v2-copy-v1-output according to v1:"
+./build/read-v1 v2-copy-v1-output.root
