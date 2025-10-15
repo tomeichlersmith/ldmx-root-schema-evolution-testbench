@@ -2,11 +2,15 @@
 #include "TTreeReader.h"
 
 #ifdef USE_HEADER_V2
-#include "Header_v2.h"
-#define FILEPREF "v2-copy-"
+# include "Header_v2.h"
+# ifdef USE_TTREE_CLONETREE
+#  define FILEPREF "v2-copy-clone-tree-"
+# else
+#  define FILEPREF "v2-copy-manual-"
+# endif
 #else
-#include "Header_v1.h"
-#define FILEPREF "v1-copy-"
+# include "Header_v1.h"
+# define FILEPREF "v1-copy-"
 #endif
 
 int main(int nargs, char** argv) {
@@ -14,12 +18,27 @@ int main(int nargs, char** argv) {
   TFile f{input_file.c_str()};
   TTree* input_tree{(TTree*)f.Get("tree")};
   TFile o{(FILEPREF+input_file).c_str(), "recreate"};
-  TTree* output_tree = input_tree->CloneTree(0);
 
   Header* h_ptr = new Header;
   input_tree->SetBranchAddress("header", &h_ptr);
+
+#ifdef USE_TTREE_CLONETREE
+  /**
+   * Cloning the Tree without the addresses is not working.
+   */
+  TTree* output_tree = input_tree->CloneTree(0);
+#else
+  /**
+   * "Cloning" the Tree manually by constructing a new Tree
+   * and creating the branches directly does appear to work
+   */
+  TTree* output_tree = new TTree("tree", "tree");
+  output_tree->Branch("header", &h_ptr);
+#endif
+
   for (std::size_t i{0}; i < input_tree->GetEntriesFast(); i++) {
     input_tree->GetEntry(i);
+
     int run = h_ptr->getRun();
     int event = h_ptr->getEvent();
     std::cout << "{ run: " << run << ", event: " << event << " }" << std::endl;
@@ -35,6 +54,7 @@ int main(int nargs, char** argv) {
 
   delete h_ptr;
   output_tree->Write();
+  delete output_tree;
 
   return 0;
 }

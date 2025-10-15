@@ -25,7 +25,7 @@ root_generate_dictionary(
   MODULE HeaderV2
 )
 
-set(executables write read copy)
+set(executables write read)
 foreach(executable ${executables})
   add_executable(${executable}-v1 ${executable}.cxx)
   target_link_libraries(${executable}-v1 PRIVATE HeaderV1 ROOT::TreePlayer)
@@ -34,3 +34,14 @@ foreach(executable ${executables})
   target_link_libraries(${executable}-v2 PRIVATE HeaderV2 ROOT::TreePlayer)
   target_compile_definitions(${executable}-v2 PRIVATE USE_HEADER_V2=1)
 endforeach()
+
+add_executable(copy-v1 copy.cxx)
+target_link_libraries(copy-v1 PRIVATE HeaderV1 ROOT::TreePlayer)
+
+add_executable(copy-v2-clone-tree copy.cxx)
+target_link_libraries(copy-v2-clone-tree PRIVATE HeaderV2 ROOT::TreePlayer)
+target_compile_definitions(copy-v2-clone-tree PRIVATE USE_HEADER_V2=1 USE_TTREE_CLONETREE=1)
+
+add_executable(copy-v2-manual copy.cxx)
+target_link_libraries(copy-v2-manual PRIVATE HeaderV2 ROOT::TreePlayer)
+target_compile_definitions(copy-v2-manual PRIVATE USE_HEADER_V2=1)
