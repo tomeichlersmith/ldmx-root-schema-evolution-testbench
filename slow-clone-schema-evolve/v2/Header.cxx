@@ -1,20 +1,20 @@
-#include "Header_v1.h"
+#include "Header.h"
 
 ClassImp(Header);
 
 void Header::setRun(int run) {
-  runNumber_ = run;
+  run_number_ = run;
 }
 
 int Header::getRun() const {
-  return runNumber_;
+  return run_number_;
 }
 
 void Header::setEvent(int event) {
-  eventNumber_ = event;
+  event_number_ = event;
 }
 
 int Header::getEvent() const {
-  return eventNumber_;
+  return event_number_;
 }
 

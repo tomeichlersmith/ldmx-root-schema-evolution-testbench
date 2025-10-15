@@ -1,16 +1,24 @@
+#include <iostream>
+
 #include "TFile.h"
 #include "TTreeReader.h"
 
-#ifdef USE_HEADER_V2
-#include "Header_v2.h"
-#else
-#include "Header_v1.h"
-#endif
+#include "Header.h"
 
 int main(int nargs, char** argv) {
+  std::string branch{"header"};
+  if (nargs < 2) {
+    std::cout << "ERROR: Need to provide file to read.\n";
+    return 1;
+  } else if (nargs == 3) {
+    branch = argv[2];
+  } else if (nargs > 4) {
+    std::cout << "ERROR: Too many command line arguments.\n";
+    return 2;
+  }
   TFile f{argv[1]};
   TTreeReader tree("tree", &f);
-  TTreeReaderValue<Header> header(tree, "header");
+  TTreeReaderValue<Header> header(tree, branch.c_str());
   std::size_t i{0};
   while (tree.Next()) {
     auto header_ptr = header.Get();
@@ -19,11 +27,9 @@ int main(int nargs, char** argv) {
     std::cout << "{ run: " << run << ", event: " << event << " }" << std::endl;
     if (run != 42) {
       std::cout << "  run != 42" << std::endl;
-      return 1;
     }
     if (i != event) {
       std::cout << "  event != index" << std::endl;
-      return 2;
     }
     i++;
   }

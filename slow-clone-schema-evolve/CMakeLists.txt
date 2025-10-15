@@ -5,23 +5,23 @@ find_package(ROOT 6.16 CONFIG REQUIRED)
 include("${ROOT_DIR}/RootMacros.cmake")
 message(STATUS "Using ROOT ${ROOT_VERSION}")
 
-add_library(HeaderV1 SHARED Header_v1.cxx)
+add_library(HeaderV1 SHARED v1/Header.cxx)
 target_link_libraries(HeaderV1 PUBLIC ROOT::Core)
-target_include_directories(HeaderV1 PUBLIC ${PROJECT_SOURCE_DIR})
+target_include_directories(HeaderV1 PUBLIC ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/v1)
 root_generate_dictionary(
   HeaderV1Dict
-  Header_v1.h
-  LINKDEF LinkDef_v1.h
+  v1/Header.h
+  LINKDEF v1/LinkDef.h
   MODULE HeaderV1
 )
 
-add_library(HeaderV2 SHARED Header_v2.cxx)
+add_library(HeaderV2 SHARED v2/Header.cxx)
 target_link_libraries(HeaderV2 PUBLIC ROOT::Core)
-target_include_directories(HeaderV2 PUBLIC ${PROJECT_SOURCE_DIR})
+target_include_directories(HeaderV2 PUBLIC ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/v2)
 root_generate_dictionary(
   HeaderV2Dict
-  Header_v2.h
-  LINKDEF LinkDef_v2.h
+  v2/Header.h
+  LINKDEF v2/LinkDef.h
   MODULE HeaderV2
 )
 

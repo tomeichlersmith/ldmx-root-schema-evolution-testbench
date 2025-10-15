@@ -1,23 +1,31 @@
+#include <iostream>
+
 #include "TFile.h"
 #include "TTreeReader.h"
 
+#include "Header.h"
+
 #ifdef USE_HEADER_V2
-# include "Header_v2.h"
 # ifdef USE_TTREE_CLONETREE
 #  define FILEPREF "v2-copy-clone-tree-"
 # else
 #  define FILEPREF "v2-copy-manual-"
 # endif
 #else
-# include "Header_v1.h"
 # define FILEPREF "v1-copy-"
 #endif
 
 int main(int nargs, char** argv) {
+  if (nargs < 3) {
+    std::cout << "ERROR: Need to provide an input file to readout and output file to write to.\n";
+    return 1;
+  } else if (nargs > 3) {
+    std::cout << "WARN : Only using first two arguments for input and output file respectively.\n";
+  }
   std::string input_file{argv[1]};
-  TFile f{input_file.c_str()};
+  TFile f{argv[1]};
   TTree* input_tree{(TTree*)f.Get("tree")};
-  TFile o{(FILEPREF+input_file).c_str(), "recreate"};
+  TFile o{argv[2], "recreate"};
 
   Header* h_ptr = new Header;
   input_tree->SetBranchAddress("header", &h_ptr);
@@ -27,12 +35,14 @@ int main(int nargs, char** argv) {
    * Cloning the Tree without the addresses is not working.
    */
   TTree* output_tree = input_tree->CloneTree(0);
+  output_tree->SetBranchAddress("header", &h_ptr);
 #else
   /**
    * "Cloning" the Tree manually by constructing a new Tree
    * and creating the branches directly does appear to work
    */
   TTree* output_tree = new TTree("tree", "tree");
+  input_tree->CopyAddresses(output_tree);
   output_tree->Branch("header", &h_ptr);
 #endif
 
@@ -55,6 +65,9 @@ int main(int nargs, char** argv) {
   delete h_ptr;
   output_tree->Write();
   delete output_tree;
+
+  o.Close();
+  f.Close();
 
   return 0;
 }
