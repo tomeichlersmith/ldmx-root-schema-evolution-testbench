@@ -27,7 +27,7 @@ int main(int nargs, char** argv) {
   TTree* input_tree{(TTree*)f.Get("tree")};
   TFile o{argv[2], "recreate"};
 
-  Header* h_ptr = new Header;
+  Header* h_ptr = nullptr; //new Header;
   input_tree->SetBranchAddress("header", &h_ptr);
 
 #ifdef USE_TTREE_CLONETREE
@@ -35,14 +35,12 @@ int main(int nargs, char** argv) {
    * Cloning the Tree without the addresses is not working.
    */
   TTree* output_tree = input_tree->CloneTree(0);
-  output_tree->SetBranchAddress("header", &h_ptr);
 #else
   /**
    * "Cloning" the Tree manually by constructing a new Tree
    * and creating the branches directly does appear to work
    */
   TTree* output_tree = new TTree("tree", "tree");
-  input_tree->CopyAddresses(output_tree);
   output_tree->Branch("header", &h_ptr);
 #endif
 
@@ -62,12 +60,13 @@ int main(int nargs, char** argv) {
     output_tree->Fill();
   }
 
-  delete h_ptr;
-  output_tree->Write();
-  delete output_tree;
+  //output_tree->Write();
+  output_tree->Print();
 
-  o.Close();
-  f.Close();
+  o.Write();
+
+  //delete h_ptr;
+  //delete output_tree;
 
   return 0;
 }
