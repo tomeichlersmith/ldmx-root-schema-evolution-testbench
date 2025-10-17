@@ -61,7 +61,6 @@ int main(int nargs, char** argv) {
   }
 
   //output_tree->Write();
-  output_tree->Print();
 
   o.Write();
 

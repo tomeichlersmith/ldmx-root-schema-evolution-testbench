@@ -25,12 +25,6 @@ int main(int nargs, char** argv) {
     int run = header_ptr->getRun();
     int event = header_ptr->getEvent();
     std::cout << "{ run: " << run << ", event: " << event << " }" << std::endl;
-    if (run != 42) {
-      std::cout << "  run != 42" << std::endl;
-    }
-    if (i != event) {
-      std::cout << "  event != index" << std::endl;
-    }
     i++;
   }
   return 0;

@@ -13,6 +13,7 @@ The full project ldmx-sw is large and takes quite some time to compile, but I’
 
 The source code for this example is available on GitHub:
 [tomeichlersmith/ldmx-root-schema-evolution-testbench](https://github.com/tomeichlersmith/ldmx-root-schema-evolution-testbench/tree/main)
+
 I have a simple class `Header` with two `int` members that have changed names.
 The `v1` `Header` uses camel case names while the `v2` `Header` uses snake case names
 and includes an updated `#pragma read` statement in its `LinkDef.h` file to be
@@ -38,9 +39,112 @@ file with both the old and new versions.
 Reading goes okay, but copying with the new schema and then reading does not go okay.
 
 ```
-./build/write-v1 v1-output.root
-./build/read-v1 v1-output.root
-./build/read-v2 v1-output.root
-./build/copy-v2-clone-tree v1-output.root v2-clone-tree-copy-v1-output.root
-./build/read-v2 v2-clone-tree-copy-v1-output.root
+$./build/write-v1 v1-output.root
+$ ./build/read-v1 v1-output.root
+{ run: 42, event: 0 }
+{ run: 42, event: 1 }
+{ run: 42, event: 2 }
+{ run: 42, event: 3 }
+{ run: 42, event: 4 }
+{ run: 42, event: 5 }
+{ run: 42, event: 6 }
+{ run: 42, event: 7 }
+{ run: 42, event: 8 }
+{ run: 42, event: 9 }
+$ ./build/read-v2 v1-output.root
+manual schema evolution rule being applied
+{ run: 42, event: 0 }
+manual schema evolution rule being applied
+{ run: 42, event: 1 }
+manual schema evolution rule being applied
+{ run: 42, event: 2 }
+manual schema evolution rule being applied
+{ run: 42, event: 3 }
+manual schema evolution rule being applied
+{ run: 42, event: 4 }
+manual schema evolution rule being applied
+{ run: 42, event: 5 }
+manual schema evolution rule being applied
+{ run: 42, event: 6 }
+manual schema evolution rule being applied
+{ run: 42, event: 7 }
+manual schema evolution rule being applied
+{ run: 42, event: 8 }
+manual schema evolution rule being applied
+{ run: 42, event: 9 }
+$ ./build/copy-v2-clone-tree v1-output.root v2-clone-tree-copy-v1-output.root
+manual schema evolution rule being applied                                                                            
+{ run: 42, event: 0 }                                                                                                 
+manual schema evolution rule being applied                                                                            
+{ run: 42, event: 1 }                                                                                                 
+manual schema evolution rule being applied                                                                            
+{ run: 42, event: 2 }                                                                                                 
+manual schema evolution rule being applied
+{ run: 42, event: 3 }
+manual schema evolution rule being applied
+{ run: 42, event: 4 }
+manual schema evolution rule being applied
+{ run: 42, event: 5 }
+manual schema evolution rule being applied
+{ run: 42, event: 6 }
+manual schema evolution rule being applied
+{ run: 42, event: 7 }
+manual schema evolution rule being applied
+{ run: 42, event: 8 }
+manual schema evolution rule being applied
+{ run: 42, event: 9 }
+$ ./build/read-v2 v2-clone-tree-copy-v1-output.root
+manual schema evolution rule being applied
+{ run: -1904246784, event: -1904246784 }
+manual schema evolution rule being applied
+{ run: -1904246784, event: -1904246784 }
+manual schema evolution rule being applied
+{ run: -1904246784, event: -1904246784 }
+manual schema evolution rule being applied
+{ run: -1904246784, event: -1904246784 }
+manual schema evolution rule being applied
+{ run: -1904246784, event: -1904246784 }
+manual schema evolution rule being applied
+{ run: -1904246784, event: -1904246784 }
+manual schema evolution rule being applied
+{ run: -1904246784, event: -1904246784 }
+manual schema evolution rule being applied
+{ run: -1904246784, event: -1904246784 }
+manual schema evolution rule being applied
+{ run: -1904246784, event: -1904246784 }
+manual schema evolution rule being applied
+{ run: -1904246784, event: -1904246784 }
+$ denv ./build/copy-v2-manual data/v1-out
+put.root data/v2-copy-manual-v1-output.root                                                                           
+manual schema evolution rule being applied                                                                            
+{ run: 42, event: 0 }                                                                                                 
+manual schema evolution rule being applied
+{ run: 42, event: 1 }
+manual schema evolution rule being applied
+{ run: 42, event: 2 }
+manual schema evolution rule being applied
+{ run: 42, event: 3 }
+manual schema evolution rule being applied
+{ run: 42, event: 4 }
+manual schema evolution rule being applied
+{ run: 42, event: 5 }
+manual schema evolution rule being applied
+{ run: 42, event: 6 }
+manual schema evolution rule being applied
+{ run: 42, event: 7 }
+manual schema evolution rule being applied
+{ run: 42, event: 8 }
+manual schema evolution rule being applied
+{ run: 42, event: 9 }
+$ denv ./build/read-v2 data/v2-copy-manual-v1-output.root 
+{ run: 42, event: 0 }
+{ run: 42, event: 1 }
+{ run: 42, event: 2 }
+{ run: 42, event: 3 }
+{ run: 42, event: 4 }
+{ run: 42, event: 5 }
+{ run: 42, event: 6 }
+{ run: 42, event: 7 }
+{ run: 42, event: 8 }
+{ run: 42, event: 9 }
 ```
