@@ -1,12 +1,29 @@
-# Rename a std::map Member Variable
-
 This is test code for a ROOT Forum post.
-https://root-forum.cern.ch/t/schema-evolution-renaming-a-std-map-member-variable/64310
 
-I am unable to use the simple `#pragma read` statement to rename a member variable
-that has the `std::map` type. In this case, it seems to just be ignored, but in
-a more complex case (see LDMX-Software/ldmx-sw Issue #1815) it results in a segmentation
-fault.
+# Schema Evolution while Cloning
+_ROOT Version_: 6.34.04
+_Platform_: linuxx8664gcc
+_Compiler_: GCC 13.3.0
+
+Specifically, I am using the container image [ldmx/pro:v4.4.0 on DockerHub](https://hub.docker.com/layers/ldmx/pro/v4.4.0/images/sha256-3e2c25c7430441b5871d334b13a0ed93bcfa58cfe2fd6d88503040df7a1ae01f).
+
+I am working in a project where we recently adopted some naming guidelines for our member variables and have now applied them to classes that are serialized by ROOT into output TTrees. However, unsurprisingly, we still have data files with the old schema (old names for member variables) floating around and so I am interested in having some schema rules that rename the member variables when reading the old format.
+
+The full project ldmx-sw is large and takes quite some time to compile, but I’ve been able to partially replicate the issue with a smaller example.
+
+The source code for this example is available on GitHub:
+[tomeichlersmith/ldmx-root-schema-evolution-testbench](https://github.com/tomeichlersmith/ldmx-root-schema-evolution-testbench/tree/main)
+I have a simple class `Header` with two `int` members that have changed names.
+The `v1` `Header` uses camel case names while the `v2` `Header` uses snake case names
+and includes an updated `#pragma read` statement in its `LinkDef.h` file to be
+able to evolve the `v1` schema into `v2`.
+
+Running the [`./show`](show) script displays all of the grizzly details, but
+the the summary is
+- I can write, read, and copy a TTree of v1 while only using v1
+- I can write, read, and copy a TTree of v2 while only using v2
+- I can write v1 and read it with v2, but if I attempt to copy v1 with v2, the output file does not read correctly (even though the printouts while doing the copy are correct)
+- I can avoid this write-out error by manually syncing the addresses between the input and output TTree (instead of using `CloneTree`), but then I cannot expect branches that are not "observed" while copying to be copied at all.
 
 ## Compile
 Normal config and build cycle using CMake to find and configure the ROOT installation.
@@ -18,15 +35,12 @@ cmake --build build
 ## Run
 Write a file using the old version of the Header object and attempt to read that
 file with both the old and new versions.
+Reading goes okay, but copying with the new schema and then reading does not go okay.
 
 ```
-./build/write
-./build/read-v1
-./build/read-v2
-```
-
-With the denv inherited from this repository, all of these commands can be run by
-prefixing them with `denv` and the exact ldmx-sw environment will be replicated.
-```
-denv ./show
+./build/write-v1 v1-output.root
+./build/read-v1 v1-output.root
+./build/read-v2 v1-output.root
+./build/copy-v2-clone-tree v1-output.root v2-clone-tree-copy-v1-output.root
+./build/read-v2 v2-clone-tree-copy-v1-output.root
 ```
