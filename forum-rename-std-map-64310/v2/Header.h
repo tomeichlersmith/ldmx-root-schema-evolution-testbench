@@ -11,5 +11,6 @@ class Header {
   int getRun() const;
   void add(const std::string& name, int val);
   int get(const std::string& name) const;
+  void print() const;
   ClassDef(Header, 6);
 };

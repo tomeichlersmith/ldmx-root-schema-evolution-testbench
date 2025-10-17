@@ -13,7 +13,8 @@ echo "\nReading file with Header V1:"
 ./build/read-v1
 
 echo "\nReading file with Header V2:"
-./build/read-v2
+# || true because we expect this to fail
+./build/read-v2 || true
 
 echo "\nReading file with Header Both:"
 ./build/read-both

@@ -1,4 +1,5 @@
 #include "Header.h"
+#include <iostream>
 
 ClassImp(Header);
 
@@ -18,3 +19,10 @@ int Header::get(const std::string& name) const {
   return my_parameters_.at(name);
 }
 
+void Header::print() const {
+  std::cout << "{ " << "run_number_ = " << run_number_ << ", my_parameters_ = { ";
+  for (const auto& [key, val]: my_parameters_) {
+    std::cout << key << ": " << val << " ";
+  }
+  std::cout << "} }" << std::endl;
+}
