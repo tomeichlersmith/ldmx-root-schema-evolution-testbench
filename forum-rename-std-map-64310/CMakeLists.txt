@@ -12,8 +12,8 @@ foreach(option ${options})
   target_include_directories(Header${option} PUBLIC ${PROJECT_SOURCE_DIR}/${option})
   root_generate_dictionary(
     Header${option}Dict
-    v1/Header.h
-    LINKDEF v1/LinkDef.h
+    ${option}/Header.h
+    LINKDEF ${option}/LinkDef.h
     MODULE Header${option}
   )
 
