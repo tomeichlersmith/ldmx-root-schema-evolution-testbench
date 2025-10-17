@@ -12,6 +12,6 @@
   targetClass="Header" \
   target="run_number_, my_parameters_" \
   include="iostream" \
-  code="{ std::cout << \"manual schema evolution rule being applied\" << std::endl; run_number_ = onfile.runNumber_; my_parameters_ = onfile.myParameters_; }"
+  code="{ std::cout << \"v2 schema evolution rule being applied: run_number_ = onfile.runNumber_; my_parameters_ = onfile.myParameters_;\" << std::endl; run_number_ = onfile.runNumber_; my_parameters_ = onfile.myParameters_; }"
 
 #endif
