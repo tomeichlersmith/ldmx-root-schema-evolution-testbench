@@ -8,6 +8,7 @@ cmake --build build
 
 echo "\nWriting Header V1 to file..."
 ./build/write
+rootls -t v1-output.root
 
 echo "\nReading file with Header V1:"
 ./build/read-v1
