@@ -1,11 +1,7 @@
 #include "TFile.h"
 #include "TTreeReader.h"
 
-#ifdef USE_HEADER_V2
-#include "Header_v2.h"
-#else
-#include "Header_v1.h"
-#endif
+#include "Header.h"
 
 int main() {
   TFile f{"v1-output.root"};
@@ -18,11 +14,7 @@ int main() {
     if (run != 2) {
       return 1;
     }
-#ifdef USE_HEADER_V2
-    std::cout << "my_parameter[example]: ";
-#else
-    std::cout << "myParameter[example]: ";
-#endif
+    std::cout << "my parameter[example]: ";
     int eg{-1};
     try {
       eg = header_ptr->get("example");
