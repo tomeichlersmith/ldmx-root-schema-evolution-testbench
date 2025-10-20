@@ -1,0 +1,8 @@
+denv_name="forum-rename-std-map-64310"
+denv_image="ldmx/dev@sha256:b64ca4d06c8c6b593fc7d0bcaee49ef10bb80bc3ed248b084761210b0835fa3b"
+denv_shell="/bin/bash -i"
+denv_mounts=""
+denv_env_var_copy_all="true"
+denv_env_var_copy=""
+denv_env_var_set=""
+denv_network="true"
