@@ -34,6 +34,8 @@ echo "Contents of v2-copy-v2-output:"
 echo "\nforcing schema evolution during copying seems to require manually syncing the addresses"
 echo "Copying v1-output with v2 (using TTree::CloneTree):"
 ./build/copy-v2-clone-tree data/v1-output.root data/v2-copy-clone-tree-v1-output.root
+echo "Copying v1-output with v2 (using TTree::CopyAddresses):"
+./build/copy-v2-copy-addr data/v1-output.root data/v2-copy-addr-v1-output.root
 echo "Copying v1-output with v2 (manual address sync):"
 ./build/copy-v2-manual data/v1-output.root data/v2-copy-manual-v1-output.root
 
@@ -42,6 +44,8 @@ echo "Contents of v1-output according to v2:"
 ./build/read-v2 data/v1-output.root
 echo "Contents of v2-copy-clone-tree-v1-output according to v2:"
 ./build/read-v2 data/v2-copy-clone-tree-v1-output.root
+echo "Contents of v2-copy-addr-v1-output according to v2:"
+./build/read-v2 data/v2-copy-addr-v1-output.root
 echo "Contents of v2-copy-manual-v1-output according to v2:"
 ./build/read-v2 data/v2-copy-manual-v1-output.root
 

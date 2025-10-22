@@ -5,16 +5,6 @@
 
 #include "Header.h"
 
-#ifdef USE_HEADER_V2
-# ifdef USE_TTREE_CLONETREE
-#  define FILEPREF "v2-copy-clone-tree-"
-# else
-#  define FILEPREF "v2-copy-manual-"
-# endif
-#else
-# define FILEPREF "v1-copy-"
-#endif
-
 int main(int nargs, char** argv) {
   if (nargs < 3) {
     std::cout << "ERROR: Need to provide an input file to readout and output file to write to.\n";
@@ -24,24 +14,36 @@ int main(int nargs, char** argv) {
   }
   std::string input_file{argv[1]};
   TFile f{argv[1]};
-  TTree* input_tree{(TTree*)f.Get("tree")};
+  TTree* input_tree{f.Get<TTree>("tree")};
   TFile o{argv[2], "recreate"};
-
-  Header* h_ptr = nullptr; //new Header;
-  input_tree->SetBranchAddress("header", &h_ptr);
 
 #ifdef USE_TTREE_CLONETREE
   /**
    * Cloning the Tree without the addresses is not working.
    */
+  Header* h_ptr = nullptr; //new Header;
+  input_tree->SetBranchAddress("header", &h_ptr);
   TTree* output_tree = input_tree->CloneTree(0);
-#else
+  output_tree->SetBranchAddress("header", &h_ptr);
+#elif MANUAL_ADDR_SYNC
   /**
    * "Cloning" the Tree manually by constructing a new Tree
    * and creating the branches directly does appear to work
    */
+  Header* h_ptr = nullptr; //new Header;
+  input_tree->SetBranchAddress("header", &h_ptr);
   TTree* output_tree = new TTree("tree", "tree");
   output_tree->Branch("header", &h_ptr);
+#else
+  /**
+   * Solution as described by @pcanal on ROOT Forum.
+   */
+  TTree* output_tree = new TTree("tree", "tree");
+  input_tree->GetEntry(0);
+  input_tree->CopyAddresses(output_tree);
+  Header* h_ptr = nullptr; //new Header;
+  input_tree->SetBranchAddress("header", &h_ptr);
+  output_tree->SetBranchAddress("header", &h_ptr);
 #endif
 
   for (std::size_t i{0}; i < input_tree->GetEntriesFast(); i++) {
