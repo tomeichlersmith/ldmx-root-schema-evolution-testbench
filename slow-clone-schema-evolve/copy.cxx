@@ -38,9 +38,8 @@ int main(int nargs, char** argv) {
   /**
    * Solution as described by @pcanal on ROOT Forum.
    */
-  TTree* output_tree = new TTree("tree", "tree");
+  TTree* output_tree = input_tree->CloneTree(0);
   input_tree->GetEntry(0);
-  input_tree->CopyAddresses(output_tree);
   Header* h_ptr = nullptr; //new Header;
   input_tree->SetBranchAddress("header", &h_ptr);
   output_tree->SetBranchAddress("header", &h_ptr);
