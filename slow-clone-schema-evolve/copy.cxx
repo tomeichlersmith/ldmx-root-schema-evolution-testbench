@@ -29,18 +29,9 @@ int main(int nargs, char** argv) {
     int run = h_ptr->getRun();
     int event = h_ptr->getEvent();
     std::cout << "{ run: " << run << ", event: " << event << " }" << std::endl;
-    if (run != 42) {
-      std::cout << "  run != 42" << std::endl;
-    }
-    if (i != event) {
-      std::cout << "  event != index" << std::endl;
-    }
-
     output_tree->Fill();
   }
-
-  //output_tree->Write();
-
+  output_tree->Write();
   o.Write();
 
   //delete h_ptr;
