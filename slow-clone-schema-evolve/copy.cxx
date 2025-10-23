@@ -17,8 +17,8 @@ int main(int nargs, char** argv) {
   TTree* input_tree{f.Get<TTree>("tree")};
   TFile o{argv[2], "recreate"};
 
-  TTree* output_tree = input_tree->CloneTree(0);
   input_tree->GetEntry(0);
+  TTree* output_tree = input_tree->CloneTree(0);
   Header* h_ptr = nullptr; //new Header;
   input_tree->SetBranchAddress("header", &h_ptr);
   output_tree->SetBranchAddress("header", &h_ptr);
