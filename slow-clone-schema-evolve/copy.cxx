@@ -17,33 +17,11 @@ int main(int nargs, char** argv) {
   TTree* input_tree{f.Get<TTree>("tree")};
   TFile o{argv[2], "recreate"};
 
-#ifdef USE_TTREE_CLONETREE
-  /**
-   * Cloning the Tree without the addresses is not working.
-   */
-  Header* h_ptr = nullptr; //new Header;
-  input_tree->SetBranchAddress("header", &h_ptr);
-  TTree* output_tree = input_tree->CloneTree(0);
-  output_tree->SetBranchAddress("header", &h_ptr);
-#elif MANUAL_ADDR_SYNC
-  /**
-   * "Cloning" the Tree manually by constructing a new Tree
-   * and creating the branches directly does appear to work
-   */
-  Header* h_ptr = nullptr; //new Header;
-  input_tree->SetBranchAddress("header", &h_ptr);
-  TTree* output_tree = new TTree("tree", "tree");
-  output_tree->Branch("header", &h_ptr);
-#else
-  /**
-   * Solution as described by @pcanal on ROOT Forum.
-   */
   TTree* output_tree = input_tree->CloneTree(0);
   input_tree->GetEntry(0);
   Header* h_ptr = nullptr; //new Header;
   input_tree->SetBranchAddress("header", &h_ptr);
   output_tree->SetBranchAddress("header", &h_ptr);
-#endif
 
   for (std::size_t i{0}; i < input_tree->GetEntriesFast(); i++) {
     input_tree->GetEntry(i);

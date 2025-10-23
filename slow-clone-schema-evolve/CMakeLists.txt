@@ -38,14 +38,5 @@ endforeach()
 add_executable(copy-v1 copy.cxx)
 target_link_libraries(copy-v1 PRIVATE HeaderV1 ROOT::TreePlayer)
 
-add_executable(copy-v2-clone-tree copy.cxx)
-target_link_libraries(copy-v2-clone-tree PRIVATE HeaderV2 ROOT::TreePlayer)
-target_compile_definitions(copy-v2-clone-tree PRIVATE USE_HEADER_V2=1 USE_TTREE_CLONETREE=1)
-
-add_executable(copy-v2-manual copy.cxx)
-target_link_libraries(copy-v2-manual PRIVATE HeaderV2 ROOT::TreePlayer)
-target_compile_definitions(copy-v2-manual PRIVATE USE_HEADER_V2=1 MANUAL_ADDR_SYNC=1)
-
-add_executable(copy-v2-copy-addr copy.cxx)
-target_link_libraries(copy-v2-copy-addr PRIVATE HeaderV2 ROOT::TreePlayer)
-target_compile_definitions(copy-v2-copy-addr PRIVATE USE_HEADER_V2=1)
+add_executable(copy-v2 copy.cxx)
+target_link_libraries(copy-v2 PRIVATE HeaderV2 ROOT::TreePlayer)
