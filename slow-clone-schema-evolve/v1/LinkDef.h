@@ -3,6 +3,11 @@
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
 
-#pragma link C++ class Header+ ;
+#ifdef AS_OLD
+#pragma link C++ class Header+;
+#else
+#pragma link C++ namespace v1;
+#pragma link C++ class v1::Header+;
+#endif
 
 #endif

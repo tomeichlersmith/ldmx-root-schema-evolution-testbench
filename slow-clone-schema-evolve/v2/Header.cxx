@@ -1,6 +1,8 @@
 #include "Header.h"
 
-ClassImp(Header);
+ClassImp(v2::Header);
+
+namespace v2 {
 
 void Header::setRun(int run) {
   run_number_ = run;
@@ -18,3 +20,4 @@ int Header::getEvent() const {
   return event_number_;
 }
 
+}

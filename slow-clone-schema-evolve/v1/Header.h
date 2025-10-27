@@ -4,6 +4,10 @@
 #include <string>
 #include <map>
 
+#ifndef AS_OLD
+namespace v1 {
+#endif
+
 class Header {
   int runNumber_;
   int eventNumber_;
@@ -12,5 +16,9 @@ class Header {
   int getRun() const;
   void setEvent(int event);
   int getEvent() const;
-  ClassDef(Header, 5);
+  ClassDef(Header, 1);
 };
+
+#ifndef AS_OLD
+}
+#endif

@@ -3,7 +3,12 @@
 #include "TFile.h"
 #include "TTreeReader.h"
 
-#include "Header.h"
+#ifdef AS_OLD
+#include "v1/Header.h"
+#else
+#include "v2/Header.h"
+using namespace v2;
+#endif
 
 int main(int nargs, char** argv) {
   std::string branch{"header"};

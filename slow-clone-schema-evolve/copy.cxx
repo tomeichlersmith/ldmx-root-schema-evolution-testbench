@@ -3,7 +3,8 @@
 #include "TFile.h"
 #include "TTreeReader.h"
 
-#include "Header.h"
+#include "v1/Header.h"
+#include "v2/Header.h"
 
 int main(int nargs, char** argv) {
   if (nargs < 3) {
@@ -19,12 +20,30 @@ int main(int nargs, char** argv) {
 
   input_tree->GetEntry(0);
   TTree* output_tree = input_tree->CloneTree(0);
-  Header* h_ptr = nullptr; //new Header;
-  input_tree->SetBranchAddress("header", &h_ptr);
-  output_tree->SetBranchAddress("header", &h_ptr);
+  v2::Header* h_ptr = new v2::Header;
+  /*
+  auto input_br = input_tree->GetBranch("header");
+  // TBranchElement::EStatusBits::kDeleteObject
+  // is protected so I manually copy the index
+  input_br->SetBit((1ULL << (16)), false);
+  input_br->SetObject(h_ptr);
+
+  auto output_br = output_tree->GetBranch("header");
+  output_br->SetBit((1ULL << (16)), false);
+  dynamic_cast<TBranchElement*>(output_br)->ResetDeleteObject();
+  output_br->SetObject(h_ptr);
+  */
 
   for (std::size_t i{0}; i < input_tree->GetEntriesFast(); i++) {
     input_tree->GetEntry(i);
+    if (i == 0) {
+      /*
+      input_br->SetObject(h_ptr);
+      output_br->SetObject(h_ptr);
+      */
+      input_tree->SetBranchAddress("header", &h_ptr);
+      output_tree->SetBranchAddress("header", &h_ptr);
+    }
 
     int run = h_ptr->getRun();
     int event = h_ptr->getEvent();
