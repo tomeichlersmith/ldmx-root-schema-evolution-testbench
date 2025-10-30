@@ -15,6 +15,16 @@ root_generate_dictionary(
   MODULE HeaderV1
 )
 
+add_library(Hit SHARED other/Hit.cxx)
+target_link_libraries(Hit PUBLIC ROOT::Core)
+target_include_directories(Hit PUBLIC ${PROJECT_SOURCE_DIR}/other)
+root_generate_dictionary(
+  HitDict
+  other/Hit.h
+  LINKDEF other/LinkDef.h
+  MODULE Hit
+)
+
 add_library(HeaderV2 SHARED v2/Header.cxx)
 target_link_libraries(HeaderV2 PUBLIC ROOT::Core)
 target_include_directories(HeaderV2 PUBLIC ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/v2)
@@ -25,18 +35,14 @@ root_generate_dictionary(
   MODULE HeaderV2
 )
 
-set(executables write read)
-foreach(executable ${executables})
-  add_executable(${executable}-v1 ${executable}.cxx)
-  target_link_libraries(${executable}-v1 PRIVATE HeaderV1 ROOT::TreePlayer)
+add_executable(write write.cxx)
+target_link_libraries(write PRIVATE HeaderV1 Hit ROOT::TreePlayer)
 
-  add_executable(${executable}-v2 ${executable}.cxx)
-  target_link_libraries(${executable}-v2 PRIVATE HeaderV2 ROOT::TreePlayer)
-  target_compile_definitions(${executable}-v2 PRIVATE USE_HEADER_V2=1)
-endforeach()
+add_executable(read-v1 read.cxx)
+target_link_libraries(read-v1 PRIVATE HeaderV1 Hit ROOT::TreePlayer)
 
-add_executable(copy-v1 copy.cxx)
-target_link_libraries(copy-v1 PRIVATE HeaderV1 ROOT::TreePlayer)
+add_executable(read-v2 read.cxx)
+target_link_libraries(read-v2 PRIVATE HeaderV2 Hit ROOT::TreePlayer)
 
-add_executable(copy-v2 copy.cxx)
-target_link_libraries(copy-v2 PRIVATE HeaderV2 ROOT::TreePlayer)
+add_executable(copy copy.cxx)
+target_link_libraries(copy PRIVATE HeaderV2 ROOT::TreePlayer)

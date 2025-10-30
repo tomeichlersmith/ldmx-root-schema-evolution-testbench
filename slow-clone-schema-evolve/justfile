@@ -12,18 +12,13 @@ clean:
     rm -r build data
 
 copy:
-    denv ./build/copy-v2 data/v1-output.root data/v2-copy-v1-output.root
+    denv ./build/copy data/output.root data/copy-output.root
 
-_write v *second:
-    denv ./build/write-{{v}} data/{{v}}-output.root {{second}}
+_read v file:
+    denv ./build/read-{{v}} {{file}}
 
-_read v file branch:
-    denv ./build/read-{{v}} {{file}} {{branch}}
+write: 
+    denv ./build/write data/output.root
 
-write-v1: (_write "v1")
-write-v1-double: (_write "v1" "second")
-write-v2: (_write "v2")
-write-v2-double: (_write "v2" "second")
-
-read-v1 file branch="header": (_read "v1" file branch)
-read-v2 file branch="header": (_read "v2" file branch)
+read-v1 file: (_read "v1" file)
+read-v2 file: (_read "v2" file)
