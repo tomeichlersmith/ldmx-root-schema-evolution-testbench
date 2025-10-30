@@ -24,8 +24,7 @@ The `v1` `Header` uses camel case names while the `v2` `Header` uses snake case 
 and includes an updated `#pragma read` statement in its `LinkDef.h` file to be
 able to evolve the `v1` schema into `v2`.
 
-Running the [`./show`](show) script displays all of the grizzly details, but
-the the summary is
+Running the programs here shows all of the grizzly details, but the the summary is
 - I can write, read, and copy[^0] a TTree of v1 while only using v1
 - I can write, read, and copy a TTree of v2 while only using v2
 - I can write v1 and read it with v2, but if I attempt to copy v1 with v2, the output file does not read correctly (even though the printouts while doing the copy are correct)
@@ -155,3 +154,11 @@ $ denv ./build/read-v2 data/v2-copy-manual-v1-output.root
 { run: 42, event: 8 }
 { run: 42, event: 9 }
 ```
+
+### Solution?
+Writing a custom version of "CloneTree" using the root branches rather than the leaf branches appears
+to be working. Now need to check all of the details.
+- [ ] what about fundamental type branches (BSILFD) that ROOT does not use `TBranchElement` for
+- [ ] what about `std::vector` branches
+- [ ] what about `std::map` branches
+- [ ] what if the dictionary for an object is not available?
