@@ -42,28 +42,27 @@ int main(int nargs, char** argv) {
       // br->GetClassName() -> nullptr
       // br->GetFullName() == br->GetName() since this is assumed to be a root branch
       // br->GetTypeName() not implemented for TBranch
-      // br->GetAddress() -> ? i expected this to be the same as leaf->GetValuePointer() ?
+      // br->GetAddress() -> nullptr (i expected this to be the same as leaf->GetValuePointer())
       // leaf->GetValuePointer() -> whats used in TTree::CopyAddresses
       auto leaf{br->GetLeaf(br->GetName())};
       std::cout << "Simple Type : {"
         << " br->name: " << br->GetName()
-        << " br->type: " << br->GetTypeName()
-        << " br->addr: " << br->GetAddress()
+        << " br->type: " << br->GetClassName()
+        << " br->addr: " << static_cast<void*>(br->GetAddress())
         << " lf->type: " << leaf->GetTypeName()
         << " lf->addr: " << leaf->GetValuePointer()
         << " }" << std::endl;
       static const std::map<std::string, std::string> TYPENAME_TO_LEAFLIST = {
         { "Int_t", "I" }
+        // TODO: add rest of BSILFD options
       };
       std::string leaflist{br->GetName()};
       auto leaf_type_name{leaf->GetTypeName()};
-      std::cout << fullname << " " << leaf_type_name << " -> ";
-      fullname += "/" + TYPENAME_TO_LEAFLIST.at(br->GetLeaf(br->GetName())->GetTypeName());
-      std::cout << fullname << std::endl;
+      leaflist += "/" + TYPENAME_TO_LEAFLIST.at(br->GetLeaf(br->GetName())->GetTypeName());
       output_tree->Branch(
           br->GetName(),
-          br->GetAddress(),
-          fullname.c_str()
+          leaf->GetValuePointer(),
+          leaflist.c_str()
       );
     }
   }
