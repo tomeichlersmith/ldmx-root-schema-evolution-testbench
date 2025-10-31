@@ -45,4 +45,4 @@ add_executable(read-v2 read.cxx)
 target_link_libraries(read-v2 PRIVATE HeaderV2 Hit ROOT::TreePlayer)
 
 add_executable(copy copy.cxx)
-target_link_libraries(copy PRIVATE HeaderV2 ROOT::TreePlayer)
+target_link_libraries(copy PRIVATE HeaderV2 Hit ROOT::TreePlayer)
