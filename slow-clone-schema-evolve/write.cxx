@@ -4,6 +4,7 @@
 #include "TTree.h"
 
 #include "Header.h"
+#include "Hit.h"
 
 int main(int nargs, char** argv) {
   if (nargs < 2) {
@@ -17,12 +18,21 @@ int main(int nargs, char** argv) {
   }
   TFile f{argv[1], "recreate"};
   TTree t{"tree", "tree"};
+  std::vector<Hit> hits;
   Header h;
   int i10;
   h.setRun(42);
+  t.Branch("hits", &hits);
   t.Branch("header", &h);
   t.Branch("tenindex", &i10);
   for (std::size_t i{0}; i < 10; i++) {
+    hits.clear();
+    for (std::size_t i_hit{0}; i_hit < (10-i)/2; i_hit++) {
+      hits.emplace_back();
+      float hit{0.5f*static_cast<float>(i_hit)};
+      hits.back().setEDep(hit);
+      hits.back().setPosition({hit-0.25f, hit, hit+0.25f});
+    }
     i10 = 10*i;
     h.setEvent(i);
     t.Fill();

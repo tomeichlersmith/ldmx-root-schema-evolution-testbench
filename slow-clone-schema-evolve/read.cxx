@@ -4,6 +4,7 @@
 #include "TTreeReader.h"
 
 #include "Header.h"
+#include "Hit.h"
 
 int main(int nargs, char** argv) {
   if (nargs < 2) {
@@ -17,12 +18,22 @@ int main(int nargs, char** argv) {
   TTreeReader tree("tree", &f);
   TTreeReaderValue<Header> header(tree, "header");
   TTreeReaderValue<int> tenindex(tree, "tenindex");
+  TTreeReaderValue<std::vector<Hit>> hits(tree, "hits");
   std::size_t i{0};
   while (tree.Next()) {
     auto header_ptr = header.Get();
     int run = header_ptr->getRun();
     int event = header_ptr->getEvent();
     std::cout << "header: { run: " << run << ", event: " << event << " } tenindex: " << *tenindex << std::endl;
+    std::cout << "hits: {";
+    for (const auto& hit : *(hits.Get())) {
+      std::cout << " [ " << hit.getEDep() << " (";
+      for (const auto& x : hit.getPosition()) {
+        std::cout << " " << x;
+      }
+      std::cout << " ) ]";
+    }
+    std::cout << " }" << std::endl;
     i++;
   }
   return 0;

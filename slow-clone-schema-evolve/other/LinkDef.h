@@ -4,5 +4,6 @@
 #pragma link C++ nestedtypedef;
 
 #pragma link C++ class Hit+;
+#pragma link C++ class std::vector<Hit>+;
 
 #endif
