@@ -158,7 +158,11 @@ $ denv ./build/read-v2 data/v2-copy-manual-v1-output.root
 ### Solution?
 Writing a custom version of "CloneTree" using the root branches rather than the leaf branches appears
 to be working. Now need to check all of the details.
-- [ ] what about fundamental type branches (BSILFD) that ROOT does not use `TBranchElement` for
+- [x] what about fundamental type branches (BSILFD) that ROOT does not use `TBranchElement` for
+  - use `leaf->GetValuePointer()`
 - [ ] what about `std::vector` branches
+  - I can copy them in this method when the contained class does not require evolution, but I'm optimistic since the dictionary is being loaded anyways
 - [ ] what about `std::map` branches
-- [ ] what if the dictionary for an object is not available?
+- [x] what if the dictionary for an object is not available?
+  - can't get this to work, just going to require all event objects to be loaded at runtime
+  - which is not that big of an ask, we were doing that until my schema evolution pr and its required for using the objects in memory anyways
