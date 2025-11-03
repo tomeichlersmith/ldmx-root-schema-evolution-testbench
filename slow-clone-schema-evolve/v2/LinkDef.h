@@ -4,6 +4,8 @@
 #pragma link C++ nestedtypedef;
 
 #pragma link C++ class Header+ ;
+#pragma link C++ class std::vector<Header>+;
+#pragma link C++ class std::map<int, Header>+;
 
 #pragma read \
   sourceClass="Header" \
@@ -12,6 +14,6 @@
   targetClass="Header" \
   target="run_number_, event_number_" \
   include="iostream" \
-  code="{ std::cout << \"manual schema evolution rule being applied\" << std::endl; run_number_ = onfile.runNumber_; event_number_ = onfile.eventNumber_; }"
+  code="{ run_number_ = onfile.runNumber_; event_number_ = onfile.eventNumber_; }"
 
 #endif

@@ -19,6 +19,8 @@ int main(int nargs, char** argv) {
   TTreeReaderValue<Header> header(tree, "header");
   TTreeReaderValue<int> tenindex(tree, "tenindex");
   TTreeReaderValue<std::vector<Hit>> hits(tree, "hits");
+  TTreeReaderValue<std::vector<Header>> headers(tree, "headers");
+  TTreeReaderValue<std::map<int, Header>> header_map(tree, "header_map");
   std::size_t i{0};
   while (tree.Next()) {
     auto header_ptr = header.Get();
@@ -32,6 +34,16 @@ int main(int nargs, char** argv) {
         std::cout << " " << x;
       }
       std::cout << " ) ]";
+    }
+    std::cout << " }" << std::endl;
+    std::cout << "headers: [";
+    for (const auto& h : *(headers.Get())) {
+      std::cout << " { run: " << h.getRun() << ", event: " << h.getEvent() << "}";
+    }
+    std::cout << " ]" << std::endl;
+    std::cout << "header_map: {";
+    for (const auto& [i, h] : *(header_map.Get())) {
+      std::cout << " " << i << ": { run: " << h.getRun() << ", event: " << h.getEvent() << "}";
     }
     std::cout << " }" << std::endl;
     i++;
