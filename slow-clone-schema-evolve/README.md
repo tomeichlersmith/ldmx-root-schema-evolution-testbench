@@ -160,8 +160,9 @@ Writing a custom version of "CloneTree" using the root branches rather than the 
 to be working. Now need to check all of the details.
 - [x] what about fundamental type branches (BSILFD) that ROOT does not use `TBranchElement` for
   - use `leaf->GetValuePointer()`
-- [ ] what about `std::vector` branches
+- [x] what about `std::vector` branches
   - I can copy them in this method when the contained class does not require evolution, but I'm optimistic since the dictionary is being loaded anyways
+  - Copying and reading a `std::vector<Header>` appears to be working
 - [ ] what about `std::map` branches
 - [x] ~what if the dictionary for an object is not available?~
   - can't get this to work, just going to require all event objects to be loaded at runtime
