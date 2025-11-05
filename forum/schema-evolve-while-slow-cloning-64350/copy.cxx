@@ -76,6 +76,8 @@ int main(int nargs, char** argv) {
       static const std::map<std::string, std::string> TYPENAME_TO_LEAFLIST = {
         { "Int_t", "I" }
         // TODO: add rest of BSILFD options
+        // could be avoided if https://github.com/root-project/root/pull/20278
+        // then would use leaf->GetTypeCode()
       };
       std::string leaflist{br->GetName()};
       auto leaf_type_name{leaf->GetTypeName()};
@@ -89,16 +91,24 @@ int main(int nargs, char** argv) {
   }
 
   /* using CloneTree
-   * we could try to CloneTree and then remove branches but
-   * that seems to be more work than just always including the dictionary
-   * and when I tried the naive approach, it segfaulted after the first event
+   * we could try to CloneTree and then remove branches
+   * https://github.com/root-project/root/issues/9252
+   *
   TTree* output_tree = input_tree->CloneTree(0);
-  input_tree->GetListOfClones()->Remove(output_tree);
+  //input_tree->GetListOfClones()->Remove(output_tree);
   // get and remove branch pointing at input address
-  auto output_br = output_tree->GetBranch("header");
-  output_tree->GetListOfBranches()->Remove(output_br);
-  // create new branch (same name) with new address
-  output_br = output_tree->Branch("header", &h_ptr);
+  auto output_br = dynamic_cast<TBranchElement*>(output_tree->GetBranch("header"));
+  if (output_br) {
+    auto i_output_br = output_tree->GetListOfBranches()->IndexOf(i_output_br);
+    TBranch* new_br = output_tree->Branch(ouput_br->GetName(), output_br->GetClassName(), nullptr);
+    output_tree->GetListOfBranches()->Remove(new_br);
+    output_tree->GetListOfBranches()->AddAt(new_br, i_output_br);
+    delete output_br;
+
+    // Compress and CopyAddresses only needs to happen once
+    output_tree->GetListOfLeaves()->Compress();
+    input_tree->CopyAddresses(output_tree);
+  }
   */
 
   Header* h_ptr = nullptr;
