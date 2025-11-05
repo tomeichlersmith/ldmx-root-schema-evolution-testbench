@@ -12,7 +12,7 @@ _Compiler_: GCC 13.3.0
 
 Specifically, I am using the container image [ldmx/pro:v4.4.0 on DockerHub](https://hub.docker.com/layers/ldmx/pro/v4.4.0/images/sha256-3e2c25c7430441b5871d334b13a0ed93bcfa58cfe2fd6d88503040df7a1ae01f).
 
-The source code for this example is available on GitHub: [tomeichlersmith/ldmx-root-schema-evolution-testbench](https://github.com/tomeichlersmith/ldmx-root-schema-evolution-testbench/tree/main) in the `schema-evolve-std-map-value-type` subdirectory.
+The source code for this example is available on GitHub: [tomeichlersmith/ldmx-root-schema-evolution-testbench](https://github.com/tomeichlersmith/ldmx-root-schema-evolution-testbench/tree/main) in the `forum/schema-evolve-std-map-value` subdirectory.
 
 I have a simple class `Header` with two `int` members that have changed names.
 The `v1` `Header` uses camel case names while the `v2` `Header` uses snake case names
