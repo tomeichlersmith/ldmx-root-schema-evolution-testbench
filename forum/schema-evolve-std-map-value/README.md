@@ -31,3 +31,4 @@ before making my own forum post.
 - https://root-forum.cern.ch/t/manual-schema-evolution-with-i-o-rules-and-branches-containing-vector-t/64026
 - https://github.com/root-project/root/issues/19650
 - https://github.com/root-project/root/pull/19688
+- https://github.com/root-project/root/issues/19773
