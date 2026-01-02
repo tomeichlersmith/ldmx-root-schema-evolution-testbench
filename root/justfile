@@ -1,6 +1,11 @@
 @_default:
     just --list --justfile {{ justfile() }}
 
+# clone root
+clone:
+    git clone git@github.com:tomeichlersmith/root.git src
+    git -C src origin add upstream git@github.com:root-project/root.git
+
 # configure root build
 configure:
     /usr/bin/cmake \
@@ -10,12 +15,11 @@ configure:
       -Dtesting=ON \
       -Dminimal=ON
 
-
 _build *args:
     /usr/bin/cmake --build build -- {{args}}
 
 # compile with 2 cores
-build: _build
+build: _build "-j2"
 
 test-all *args:
     cd build && /usr/bin/ctest {{args}}
