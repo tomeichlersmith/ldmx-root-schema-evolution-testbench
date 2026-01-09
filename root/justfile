@@ -1,0 +1,24 @@
+@_default:
+    just --list --justfile {{ justfile() }}
+
+# configure root build
+configure:
+    /usr/bin/cmake \
+      -B build \
+      -S src \
+      -DCMAKE_BUILD_TYPE=Debug \
+      -Dtesting=ON \
+      -Dminimal=ON
+
+
+_build *args:
+    /usr/bin/cmake --build build -- {{args}}
+
+# compile with 2 cores
+build: _build
+
+test-all *args:
+    cd build && /usr/bin/ctest {{args}}
+
+test-evolution:
+    ./build/tree/tree/test/evolution
